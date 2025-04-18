@@ -1,0 +1,57 @@
+{
+  "name": "masa-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "npx tsx src/index.ts",
+    "dev": "nodemon",
+    "test": "vitest",
+    "build": "tsc",
+    "list": "node scripts/dev.js list",
+    "generate": "node scripts/dev.js generate",
+    "parse-prd": "node scripts/dev.js parse-prd"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "axios": "^1.0.0",
+    "boxen": "^8.0.1",
+    "chalk": "^4.1.2",
+    "cli-table3": "^0.6.5",
+    "commander": "^11.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^5.1.0",
+    "fastmcp": "^1.21.0",
+    "figlet": "^1.8.0",
+    "fuse.js": "^7.0.0",
+    "gradient-string": "^3.0.0",
+    "helmet": "^8.1.0",
+    "inquirer": "^12.5.0",
+    "jsonwebtoken": "^9.0.2",
+    "lru-cache": "^10.2.0",
+    "openai": "^4.89.0",
+    "ora": "^8.2.0",
+    "tsx": "^4.19.3",
+    "zod": "^3.0.0"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ext": "ts",
+    "exec": "npx tsx src/index.ts"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.0.0",
+    "nodemon": "^2.0.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1"
+  },
+  "main": "dist/index.js",
+  "license": "MIT",
+  "type": "module"
+}

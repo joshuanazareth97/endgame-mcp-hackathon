@@ -1,0 +1,52 @@
+# Node dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Build output
+dist/
+build/
+out/
+coverageHey, Cortana. /
+.nyc_output/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.*
+
+# Editor directories and files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Added by Claude Task Master
+logs
+yarn-error.log*
+dev-debug.log
+# Dependency directories
+# Environment variables
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+# Task files
+tasks.json
+tasks/
+.vscode
+.cursor
+scripts/*

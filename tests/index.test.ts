@@ -1,12 +1,8 @@
-import { describe, it, expect } from "vitest";
-// import { someFunction } from "../index";
+import { describe, it, expect } from 'vitest';
 
-describe("Application Tests", () => {
-  it("should return expected output from someFunction", () => {
-    const input = "test input";
-    const expectedOutput = "expected output";
-    // expect(someFunction(input)).toEqual(expectedOutput);
+describe('MCP Server Integration Tests', () => {
+  // Placeholder for integration tests
+  it('should pass a dummy test', () => {
+    expect(true).toBe(true);
   });
-
-  // Add more test cases as needed
 });

@@ -2,13 +2,16 @@
 import { FastMCP } from 'fastmcp';
 import { z } from 'zod';
 import dotenv from 'dotenv';
+import { Logger } from './utils/logger.js';
 
 import { MasaApiClient } from './apiClients/masaApiClient.js';
 
 // Load environment variables from .env file
 dotenv.config();
 
-console.log(`Initializing Masa MCP Server v0.1.0...`);
+const logger = Logger.getInstance();
+
+logger.log(`Initializing Masa MCP Server v0.1.0...`);
 
 const server: FastMCP = new FastMCP({
   name: 'Masa MCP',
@@ -17,21 +20,21 @@ const server: FastMCP = new FastMCP({
 
 // Note: event.session does not have a simple 'sessionId'. Logging the session object.
 server.on('connect', event => {
-  console.log(`Client connected:`, event.session);
+  logger.log(`Client connected:`, event.session);
 });
 server.on('disconnect', event => {
-  console.log(`Client disconnected:`, event.session);
+  logger.log(`Client disconnected:`, event.session);
 });
 
 // Enhanced error handling for connection closed errors and other unhandled rejections
 process.on('unhandledRejection', reason => {
   // Check if it's a connection closed error
   if (reason instanceof Error && reason.message?.includes('Connection closed')) {
-    console.log('Handled connection closed event:', reason.message);
+    logger.log('Handled connection closed event:', reason.message);
   } else if (reason && typeof reason === 'object' && 'code' in reason && reason.code === -32000) {
-    console.log('Handled MCP connection closed:', reason);
+    logger.log('Handled MCP connection closed:', reason);
   } else {
-    console.error('Unhandled Promise Rejection:', reason);
+    logger.error('Unhandled Promise Rejection:', reason);
   }
 });
 
@@ -41,9 +44,9 @@ process.on('uncaughtException', error => {
     error.message?.includes('Connection closed') ||
     (error && typeof error === 'object' && 'code' in error && error.code === -32000)
   ) {
-    console.log('Handled uncaught connection error:', error.message || error);
+    logger.log('Handled uncaught connection error:', error.message || error);
   } else {
-    console.error('Uncaught Exception:', error);
+    logger.error('Uncaught Exception:', error);
   }
 });
 
@@ -60,7 +63,7 @@ server.addTool({
       const result = await client.startLiveTwitterSearch(args.query, args.maxResults);
       return JSON.stringify(result);
     } catch (error) {
-      console.error('Error in start_live_twitter_search tool:', error);
+      logger.error('[start_live_twitter_search][ERR]', error);
       throw error;
     }
   },
@@ -78,7 +81,7 @@ server.addTool({
       const result = await client.getLiveTwitterSearchStatus(args.jobId);
       return JSON.stringify(result);
     } catch (error) {
-      console.error('Error in get_live_twitter_search_status tool:', error);
+      logger.error('[get_live_twitter_search_status][ERR]', error);
       throw error;
     }
   },
@@ -99,7 +102,7 @@ server.addTool({
       });
       return JSON.stringify(result);
     } catch (error) {
-      console.error('Error in scrape_website tool:', error);
+      logger.error('[scrape_website][ERR]', error);
       throw error;
     }
   },
@@ -117,7 +120,7 @@ server.addTool({
       const result = await client.getLiveTwitterSearchResults(args.jobId);
       return JSON.stringify(result);
     } catch (error) {
-      console.error('Error in get_live_twitter_search_results tool:', error);
+      logger.error('[get_live_twitter_search_results][ERR]', error);
       throw error;
     }
   },
@@ -135,7 +138,7 @@ server.addTool({
       const result = await client.extractSearchTerms(args.userInput);
       return JSON.stringify(result);
     } catch (error) {
-      console.error('Error in extract_search_terms tool:', error);
+      logger.error('[extract_search_terms][ERR]', error);
       throw error;
     }
   },
@@ -154,7 +157,7 @@ server.addTool({
       const result = await client.analyzeData(args.tweets, args.prompt);
       return JSON.stringify(result);
     } catch (error) {
-      console.error('Error in analyze_data tool:', error);
+      logger.error('[analyze_data][ERR]', error);
       throw error;
     }
   },
@@ -174,7 +177,7 @@ server.addTool({
       const result = await client.searchWithSimilarity(args.query, args.keywords, args.maxResults);
       return JSON.stringify(result);
     } catch (error) {
-      console.error('Error in search_with_similarity tool:', error);
+      logger.error('[search_with_similarity][ERR]', error);
       throw error;
     }
   },
@@ -186,31 +189,31 @@ server
     transportType: 'stdio',
   })
   .then(() => {
-    console.log(`🚀 Masa MCP Server running with stdio `);
+    logger.log(`🚀 Masa MCP Server running with stdio `);
   })
   .catch((err: Error) => {
     // Explicitly type err
-    console.error('🚨 Failed to start MCP server:', err);
+    logger.error('🚨 Failed to start MCP server:', err);
     process.exit(1); // Exit if server fails to start
   });
 
 // Graceful shutdown handler
 const gracefulShutdown = (signal: string) => {
-  console.log(`\nReceived ${signal}. Shutting down gracefully...`);
+  logger.log(`\nReceived ${signal}. Shutting down gracefully...`);
   server
     .stop() // Assuming fastmcp has a stop method
     .then(() => {
-      console.log('✅ Server stopped.');
+      logger.log('✅ Server stopped.');
       process.exit(0);
     })
     .catch((err: Error) => {
       // Explicitly type err
-      console.error('🚨 Error during server shutdown:', err);
+      logger.error('🚨 Error during server shutdown:', err);
       process.exit(1);
     });
   // Force exit if shutdown takes too long
   setTimeout(() => {
-    console.error('🚨 Could not close connections in time, forcefully shutting down');
+    logger.error('🚨 Could not close connections in time, forcefully shutting down');
     process.exit(1);
   }, 10000); // 10 seconds timeout
 };
@@ -219,4 +222,4 @@ const gracefulShutdown = (signal: string) => {
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 
-console.log('Server setup complete. Waiting for start...');
+logger.log('Server setup complete. Waiting for start...');

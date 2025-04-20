@@ -75,5 +75,8 @@
     "vitest": "^3.1.1"
   },
   "main": "dist/index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.0.0"
+  }
 }

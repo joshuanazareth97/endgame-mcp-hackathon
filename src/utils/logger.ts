@@ -21,13 +21,23 @@ export class Logger {
   }
 
   /**
+   * Checks if debug mode is enabled via environment variable
+   * @returns boolean True if DEBUG=true, false otherwise
+   */
+  private isDebugEnabled(): boolean {
+    return process.env.DEBUG === 'true';
+  }
+
+  /**
    * Logs a message with the current timestamp
    * @param message The message to log
    * @param args Additional arguments to log
    */
   public log(message: any, ...args: any[]): void {
     const timestamp = new Date().toISOString();
-    console.log(`[${timestamp}]`, message, ...args);
+    if (this.isDebugEnabled()) {
+      console.log(`[${timestamp}]`, message, ...args);
+    }
   }
 
   /**
@@ -37,7 +47,9 @@ export class Logger {
    */
   public error(message: any, ...args: any[]): void {
     const timestamp = new Date().toISOString();
-    console.error(`[${timestamp}]`, message, ...args);
+    if (this.isDebugEnabled()) {
+      console.error(`[${timestamp}]`, message, ...args);
+    }
   }
 
   /**
@@ -47,7 +59,9 @@ export class Logger {
    */
   public warn(message: any, ...args: any[]): void {
     const timestamp = new Date().toISOString();
-    console.warn(`[${timestamp}]`, message, ...args);
+    if (this.isDebugEnabled()) {
+      console.warn(`[${timestamp}]`, message, ...args);
+    }
   }
 
   /**
@@ -57,6 +71,8 @@ export class Logger {
    */
   public info(message: any, ...args: any[]): void {
     const timestamp = new Date().toISOString();
-    console.info(`[${timestamp}]`, message, ...args);
+    if (this.isDebugEnabled()) {
+      console.info(`[${timestamp}]`, message, ...args);
+    }
   }
 }

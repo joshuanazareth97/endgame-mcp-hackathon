@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { loadEnvironment } from '../utils/env.js';
+import { Logger } from '../utils/logger.js';
 
 export const envSchema = z.object({
   MASA_API_KEY: z.string().trim().min(1, 'MASA_API_KEY is required'),
@@ -46,7 +47,7 @@ export class ConfigManager {
       return config;
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.error(
+        Logger.getInstance().error(
           'Environment configuration validation failed:',
           error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ')
         );

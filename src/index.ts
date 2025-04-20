@@ -23,8 +23,6 @@ server.on('disconnect', event => {
   console.log(`Client disconnected:`, event.session);
 });
 
-// TODO: Investigate how to handle tool start/end and specific errors (possibly via session events?)
-
 // Enhanced error handling for connection closed errors and other unhandled rejections
 process.on('unhandledRejection', reason => {
   // Check if it's a connection closed error
@@ -46,30 +44,12 @@ process.on('uncaughtException', error => {
     console.log('Handled uncaught connection error:', error.message || error);
   } else {
     console.error('Uncaught Exception:', error);
-    // Don't exit for uncaught exceptions - let the server continue running
-    // process.exit(1);
   }
 });
 
 server.addTool({
-  name: 'get_post',
-  description: 'Get a details of a post.',
-  parameters: z.object({
-    id: z.number().describe('The sequential id of the post'),
-  }),
-  execute: async args => {
-    const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${args.id}`);
-    if (!res.ok) {
-      throw new Error(`Failed to fetch post ${args.id}: ${res.statusText}`);
-    }
-    const json = await res.json();
-    return JSON.stringify(json);
-  },
-});
-
-server.addTool({
   name: 'start_live_twitter_search',
-  description: 'Initiates a new live Twitter search operation.',
+  description: 'Initiates a new search on twitter for tweets matching a certain query.',
   parameters: z.object({
     query: z.string().describe('The search query'),
     maxResults: z.number().describe('Maximum number of results to return'),
@@ -106,32 +86,18 @@ server.addTool({
 
 server.addTool({
   name: 'scrape_website',
-  description: 'Parse the contents of a website',
+  description: 'Retrieve the contents from a web URL and parse them into the specified format.',
   parameters: z.object({
     url: z.string().describe('The url to scrape'),
+    format: z.enum(['html', 'markdown', 'text']).describe('The format to parse the content into'),
   }),
   execute: async args => {
     try {
-      // Consider moving sensitive data like API keys to config (Task 3)
-      const apiKey = process.env.MASA_API_KEY || ''; // Example: Load from env
-      const res = await fetch('https://data.dev.masalabs.ai/api/v1/search/live/web/scrape', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          url: args.url,
-          format: 'text', // Assuming text format for now
-        }),
+      const client = new MasaApiClient();
+      const result = await client.scrapeWebsite(args.url, {
+        format: 'html',
       });
-      if (!res.ok) {
-        const errorBody = await res.text();
-        console.error(`Scrape API Error (${res.status}): ${errorBody}`);
-        throw new Error(`Failed to scrape website ${args.url}: ${res.statusText}`);
-      }
-      const json = await res.json();
-      return JSON.stringify(json);
+      return JSON.stringify(result);
     } catch (error) {
       console.error('Error in scrape_website tool:', error);
       throw error;

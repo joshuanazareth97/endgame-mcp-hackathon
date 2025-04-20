@@ -146,7 +146,6 @@ export class MasaApiClient implements IMasaApiClient {
     // Remove authentication headers
     delete sanitized.Authorization;
     delete sanitized.authorization;
-    // Remove any other sensitive headers if needed
     return sanitized;
   }
 

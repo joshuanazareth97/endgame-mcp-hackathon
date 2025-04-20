@@ -1,29 +1,22 @@
 import { z } from 'zod';
 import { loadEnvironment } from '../utils/env.js';
-// import { Logger } from '@/utils/logger.js';
 
-// Define schema for environment variables
 export const envSchema = z.object({
   MASA_API_KEY: z.string().trim().min(1, 'MASA_API_KEY is required'),
-
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-
   MASA_API_URL: z
     .string()
     .url('MASA_API_URL must be a valid URL')
     .default('https://api.masa.xyz/v1'),
-
   LOG_LEVEL: z.enum(['error', 'warn', 'info', 'debug']).default('info'),
 });
 
-// Type for the validated config
 export type Config = z.infer<typeof envSchema>;
 
 /**
- * ConfigManager class responsible for loading, validating and providing access to
+ * ConfigManager class for loading, validating and providing access to
  * environment configuration variables.
- *
- * This class follows the Singleton pattern to ensure only one instance exists.
+ * Uses Singleton pattern to ensure only one instance exists.
  */
 export class ConfigManager {
   private static instance: ConfigManager;
@@ -46,14 +39,10 @@ export class ConfigManager {
 
   /**
    * Validates environment variables against schema
-   * @returns Validated configuration object
    */
   private validateEnvironment(): Config {
     try {
       const config = envSchema.parse(process.env);
-      // Using info level for successful validation
-      // const logger = Logger.getDefault();
-      // logger.info('Environment configuration validated successfully');
       return config;
     } catch (error) {
       if (error instanceof z.ZodError) {

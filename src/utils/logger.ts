@@ -1,8 +1,6 @@
-// filepath: /home/joshua/development/endgame_hackathon/masa-mcp/src/utils/logger.ts
-
 /**
- * A simple logger class that wraps console.log with timestamps
- * Implemented using the Singleton pattern
+ * Logger class that adds timestamps to console output
+ * Implements the Singleton pattern
  */
 export class Logger {
   private static instance: Logger;
@@ -13,8 +11,7 @@ export class Logger {
   private constructor() {}
 
   /**
-   * Get the singleton instance of Logger
-   * @returns The Logger instance
+   * Returns the singleton instance of Logger
    */
   public static getInstance(): Logger {
     if (!Logger.instance) {

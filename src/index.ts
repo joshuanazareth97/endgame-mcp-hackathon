@@ -3,6 +3,8 @@ import { FastMCP } from 'fastmcp';
 import { z } from 'zod';
 import dotenv from 'dotenv';
 
+import { MasaApiClient } from './apiClients/masaApiClient.js';
+
 // Load environment variables from .env file
 dotenv.config();
 
@@ -66,6 +68,43 @@ server.addTool({
 });
 
 server.addTool({
+  name: 'start_live_twitter_search',
+  description: 'Initiates a new live Twitter search operation.',
+  parameters: z.object({
+    query: z.string().describe('The search query'),
+    maxResults: z.number().describe('Maximum number of results to return'),
+  }),
+  execute: async args => {
+    try {
+      const client = new MasaApiClient();
+      const result = await client.startLiveTwitterSearch(args.query, args.maxResults);
+      return JSON.stringify(result);
+    } catch (error) {
+      console.error('Error in start_live_twitter_search tool:', error);
+      throw error;
+    }
+  },
+});
+
+server.addTool({
+  name: 'get_live_twitter_search_status',
+  description: 'Retrieves the current status of a live Twitter search job.',
+  parameters: z.object({
+    jobId: z.string().describe('The ID of the search job'),
+  }),
+  execute: async args => {
+    try {
+      const client = new MasaApiClient();
+      const result = await client.getLiveTwitterSearchStatus(args.jobId);
+      return JSON.stringify(result);
+    } catch (error) {
+      console.error('Error in get_live_twitter_search_status tool:', error);
+      throw error;
+    }
+  },
+});
+
+server.addTool({
   name: 'scrape_website',
   description: 'Parse the contents of a website',
   parameters: z.object({
@@ -95,6 +134,81 @@ server.addTool({
       return JSON.stringify(json);
     } catch (error) {
       console.error('Error in scrape_website tool:', error);
+      throw error;
+    }
+  },
+});
+
+server.addTool({
+  name: 'get_live_twitter_search_results',
+  description: 'Retrieves the results of a live Twitter search job.',
+  parameters: z.object({
+    jobId: z.string().describe('The ID of the search job'),
+  }),
+  execute: async args => {
+    try {
+      const client = new MasaApiClient();
+      const result = await client.getLiveTwitterSearchResults(args.jobId);
+      return JSON.stringify(result);
+    } catch (error) {
+      console.error('Error in get_live_twitter_search_results tool:', error);
+      throw error;
+    }
+  },
+});
+
+server.addTool({
+  name: 'extract_search_terms',
+  description: 'Extracts optimized search terms from user input using AI.',
+  parameters: z.object({
+    userInput: z.string().describe('The user input to extract search terms from'),
+  }),
+  execute: async args => {
+    try {
+      const client = new MasaApiClient();
+      const result = await client.extractSearchTerms(args.userInput);
+      return JSON.stringify(result);
+    } catch (error) {
+      console.error('Error in extract_search_terms tool:', error);
+      throw error;
+    }
+  },
+});
+
+server.addTool({
+  name: 'analyze_data',
+  description: 'Analyzes tweet data using AI based on a prompt.',
+  parameters: z.object({
+    tweets: z.array(z.string()).describe('The tweets to analyze (array of strings)'),
+    prompt: z.string().describe('The analysis prompt'),
+  }),
+  execute: async args => {
+    try {
+      const client = new MasaApiClient();
+      const result = await client.analyzeData(args.tweets, args.prompt);
+      return JSON.stringify(result);
+    } catch (error) {
+      console.error('Error in analyze_data tool:', error);
+      throw error;
+    }
+  },
+});
+
+server.addTool({
+  name: 'search_with_similarity',
+  description: 'Searches Twitter content with similarity matching against keywords.',
+  parameters: z.object({
+    query: z.string().describe('The search query'),
+    keywords: z.array(z.string()).describe('Keywords to match against'),
+    maxResults: z.number().describe('Maximum number of results to return'),
+  }),
+  execute: async args => {
+    try {
+      const client = new MasaApiClient();
+      const result = await client.searchWithSimilarity(args.query, args.keywords, args.maxResults);
+      return JSON.stringify(result);
+    } catch (error) {
+      console.error('Error in search_with_similarity tool:', error);
       throw error;
     }
   },

@@ -11,10 +11,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "types": ["node", "vitest/globals"],
-    "moduleDetection": "force",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "moduleDetection": "force"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "logs"]

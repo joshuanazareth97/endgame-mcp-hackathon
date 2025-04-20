@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { loadEnvironment } from '@/utils/env.js';
+import { loadEnvironment } from '../utils/env.js';
 // import { Logger } from '@/utils/logger.js';
 
 // Define schema for environment variables

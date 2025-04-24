@@ -9,11 +9,16 @@ masa-mcp/
 ├── src/                        # Main source code, organized by feature
 │   ├── apiClients/             # Masa API client interfaces and implementations
 │   ├── config/                 # Project configuration logic
-│   ├── utils/                  # Utility modules (environment, logging)
+│   ├── services/               # Service layer with interfaces and implementations
+│   │   ├── interfaces/         # Service interfaces
+│   │   ├── implementations/    # Service implementations
+│   │   └── ServiceFactory.ts   # Factory for creating service instances
 │   ├── tools/                  # MCP Tool Executors
+│   ├── utils/                  # Utility modules (environment, logging, caching)
 │   └── index.ts                # Main entry point for the library
 ├── tests/                      # Unit tests, mirrors src/ structure
 │   ├── apiClients/             # Tests for API clients
+│   ├── ServiceFactory.test.ts  # Tests for service factory
 │   ├── config.test.ts          # Tests for config logic
 │   ├── index.test.ts           # Tests for main entry point
 │   └── logger.test.ts          # Tests for logger utility
@@ -31,9 +36,23 @@ masa-mcp/
 
 - **apiClients/**: Contains Masa API client interfaces and implementations ([IMasaApiClient.ts](../src/apiClients/IMasaApiClient.ts), [masaApiClient.ts](../src/apiClients/masaApiClient.ts)).
 - **config/**: Project configuration logic ([config.ts](../src/config/config.ts)).
-- **utils/**: Utility modules for environment and logging ([env.ts](../src/utils/env.ts), [logger.ts](../src/utils/logger.ts)).
+- **services/**: Service layer with interfaces and implementations:
+  - **ServiceFactory.ts**: Singleton factory for creating and managing service instances ([ServiceFactory.ts](../src/services/ServiceFactory.ts))
+  - **interfaces/**: Service interfaces:
+    - **IBaseService.ts**: Base interface for all services ([IBaseService.ts](../src/services/interfaces/IBaseService.ts))
+    - **ITwitterService.ts**: Interface for Twitter operations ([ITwitterService.ts](../src/services/interfaces/ITwitterService.ts))
+    - **IWebService.ts**: Interface for web scraping and search ([IWebService.ts](../src/services/interfaces/IWebService.ts))
+    - **IAnalyticsService.ts**: Interface for data analysis ([IAnalyticsService.ts](../src/services/interfaces/IAnalyticsService.ts))
+    - **IServiceFactory.ts**: Interface for service factory ([IServiceFactory.ts](../src/services/interfaces/IServiceFactory.ts))
+  - **implementations/**: Service implementations:
+    - **BaseService.ts**: Base implementation with common logging ([BaseService.ts](../src/services/implementations/BaseService.ts))
+    - **TwitterService.ts**: Twitter service implementation ([TwitterService.ts](../src/services/implementations/TwitterService.ts))
+    - **WebService.ts**: Web service implementation ([WebService.ts](../src/services/implementations/WebService.ts))
+    - **AnalyticsService.ts**: Analytics service implementation ([AnalyticsService.ts](../src/services/implementations/AnalyticsService.ts))
+- **tools/**: MCP Tool Executors, demonstrating service usage ([exampleTool.ts](../src/tools/exampleTool.ts)).
+- **utils/**: Utility modules for environment, logging, and caching ([env.ts](../src/utils/env.ts), [logger.ts](../src/utils/logger.ts), [cacheManager.ts](../src/utils/cacheManager.ts)).
 - **index.ts**: Main entry point for the library ([index.ts](../src/index.ts)).
-- **resources/**, **services/**, **tools/**: Present as placeholders for future expansion.
+- **resources/**: Present as placeholder for future expansion.
 
 ## Setup
 
@@ -112,7 +131,45 @@ To use this server with VS Code, Cursor, Windsurf, or similar IDEs, add the foll
 
 ## Performance
 
-Standard TypeScript performance; no explicit performance optimizations or bottlenecks identified in the current implementation.
+Standard TypeScript performance with the following optimizations:
+- Service instances are created only once (lazy initialization via Singleton pattern)
+- API responses are cached using the CacheManager with LRU caching and TTL support
+- Logging includes contextual information from services for better debugging
+
+## Service Layer Architecture
+
+The project implements a service-oriented architecture with the following key patterns:
+
+### Singleton Factory Pattern
+
+The `ServiceFactory` class follows the Singleton pattern to ensure only one instance exists throughout the application:
+
+```typescript
+// Get the service factory instance
+const serviceFactory = ServiceFactory.getInstance();
+
+// Get required services
+const twitterService = serviceFactory.getTwitterService();
+const webService = serviceFactory.getWebService();
+const analyticsService = serviceFactory.getAnalyticsService();
+```
+
+### Dependency Injection
+
+Services receive their dependencies (like the API client) through constructor injection:
+
+```typescript
+constructor(apiClient: IMasaApiClient) {
+  super('TwitterService');
+  this.apiClient = apiClient;
+  this.cache = CacheManager.getInstance();
+}
+```
+
+### Integration with CacheManager
+
+Services use the `CacheManager` for caching API responses to improve performance.
+
 
 ## Testing
 
@@ -121,5 +178,7 @@ Standard TypeScript performance; no explicit performance optimizations or bottle
 - Run all tests with `yarn test`.
 - Test coverage:
   - API client
-  - config
-  - utilities
+  - ServiceFactory
+  - Service implementations
+  - Config
+  - Utilities (Logger, CacheManager)

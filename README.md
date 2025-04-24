@@ -56,15 +56,16 @@ Masa Subnet 42 is a decentralized data layer for AI agents and applications, fea
 
 ## Quick Start
 
-```bash
-# Build the Docker image
-docker build -t masa-mcp-server:latest .
+To get started quickly, pull the pre-built Docker image from Docker Hub:
 
-# Run the server with your API key
-docker run --rm -i \
-  -e MASA_API_KEY=<your API key> \
-  -e MASA_API_URL=https://data.dev.masalabs.ai \
-  masa-mcp-server:latest
+```bash
+docker pull joshuanazareth/masa-mcp-server:latest
+```
+
+Then run the server with your API key:
+
+```bash
+docker run --rm -i -e MASA_API_KEY=<your API key> -e MASA_API_URL=https://data.dev.masalabs.ai joshunazareth/masa-mcp-server:latest
 ```
 
 ## Integration

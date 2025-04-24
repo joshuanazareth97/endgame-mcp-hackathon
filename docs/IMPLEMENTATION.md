@@ -110,11 +110,10 @@ This architecture makes the codebase more maintainable and allows for easier ext
 git clone <repository-url>
 ```
 
-2. Navigate to the folder and build the Docker image:
+2. Pull the pre-built Docker image from Docker Hub:
 
 ```bash
-cd masa-realtime-mcp
-docker build -t masa-mcp-server:latest .
+docker pull joshuanazareth/masa-mcp-server:latest
 ```
 
 ### Claude Desktop
@@ -134,7 +133,7 @@ To use this server with Claude Desktop add the following configuration to the "m
           "MASA_API_KEY=<your API key>",
           "-e",
           "MASA_API_URL=https://data.dev.masalabs.ai",
-          "masa-mcp-server:latest"
+          "joshuanazareth/masa-mcp-server:latest"
         ]
       }
     }
@@ -158,7 +157,7 @@ To use this server with VS Code, Cursor, Windsurf, or similar IDEs, add the foll
           "MASA_API_KEY=<your API key>",
           "-e",
           "MASA_API_URL=https://data.dev.masalabs.ai",
-          "masa-mcp-server:latest"
+          "joshuanazareth/masa-mcp-server:latest"
         ]
       }
     }

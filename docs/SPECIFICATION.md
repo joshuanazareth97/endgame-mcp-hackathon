@@ -70,6 +70,9 @@ The MCP server provides the following service APIs through the ServiceFactory:
 1. **Docker Usage**: Build and run the MCP server using the provided `Dockerfile` for consistent deployment.
 2. **Environment Setup**: Configure required environment variables in a `.env` file (e.g., API keys, endpoints).
 3. **Tool Registration**: Add new tools by implementing the standard tool interface and registering them during server startup. Use the ServiceFactory to access services.
+   - Tools are organized in separate modules by functionality (Twitter, TwitterAnalysis, Web)
+   - Each module exports its tools as named objects that can be imported and registered
+   - The central `index.ts` file in the tools directory re-exports all tools for convenient import
 4. **API Key Configuration**: Ensure valid Masa API credentials are provided via environment variables or configuration files.
 5. **Client Integration**: Clients interact with the MCP server via its API endpoints, invoking tools and receiving standardized responses.
 6. **Service Usage**: Tools should access API functionality through the service layer rather than directly using the API client.

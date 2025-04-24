@@ -49,7 +49,11 @@ masa-mcp/
     - **TwitterService.ts**: Twitter service implementation ([TwitterService.ts](../src/services/implementations/TwitterService.ts))
     - **WebService.ts**: Web service implementation ([WebService.ts](../src/services/implementations/WebService.ts))
     - **AnalyticsService.ts**: Analytics service implementation ([AnalyticsService.ts](../src/services/implementations/AnalyticsService.ts))
-- **tools/**: MCP Tool Executors, demonstrating service usage ([exampleTool.ts](../src/tools/exampleTool.ts)).
+- **tools/**: MCP Tool Executors, organized by functionality:
+  - **Twitter.ts**: Twitter search and retrieval tools ([Twitter.ts](../src/tools/Twitter.ts))
+  - **TwitterAnalysis.ts**: Twitter data analysis tools ([TwitterAnalysis.ts](../src/tools/TwitterAnalysis.ts))
+  - **Web.ts**: Web scraping tools ([Web.ts](../src/tools/Web.ts))
+  - **index.ts**: Exports all tool objects for central registration
 - **utils/**: Utility modules for environment, logging, and caching ([env.ts](../src/utils/env.ts), [logger.ts](../src/utils/logger.ts), [cacheManager.ts](../src/utils/cacheManager.ts)).
 - **index.ts**: Main entry point for the library ([index.ts](../src/index.ts)).
 - **resources/**: Present as placeholder for future expansion.
@@ -63,6 +67,38 @@ For development :
 3. Build the project with `yarn build` or `yarn build:watch` for continuous builds.
 4. Run tests with `yarn test` or `yarn test:watch` for continuous testing.
 5. Use `yarn lint` to check code style and `yarn format` to auto-format code.
+
+## Tool Architecture
+
+The MCP tool follow a modular organization pattern:
+
+1. **Separation by Domain**: Tools are separated into domain-specific modules:
+   - `Twitter.ts`: Contains tools for Twitter search and status operations
+   - `TwitterAnalysis.ts`: Contains tools for analysis of Twitter data
+   - `Web.ts`: Contains tools for web scraping operations
+
+2. **Export Pattern**: Each module exports a collection of tools as named objects:
+   ```typescript
+   export const TwitterTools = {
+     start_live_twitter_search: { ... },
+     get_live_twitter_search_status: { ... },
+     // ...
+   };
+   ```
+
+3. **Central Registration**: The main `index.ts` file imports and registers all tools:
+   ```typescript
+   import { TwitterTools, TwitterAnalysisTools, WebTools } from './tools/index.js';
+   
+   // Add Twitter tools
+   server.addTool(TwitterTools.start_live_twitter_search);
+   server.addTool(TwitterTools.get_live_twitter_search_status);
+   // ...
+   ```
+
+4. **Type Safety**: All tool execute functions are properly typed for their parameter objects.
+
+This architecture makes the codebase more maintainable and allows for easier extension of tool categories in the future.
 
 ## Usage
 

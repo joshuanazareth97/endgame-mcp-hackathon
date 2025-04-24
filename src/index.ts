@@ -1,8 +1,7 @@
 // Check if it's a connection closed errorr';
 import dotenv from 'dotenv';
 import { FastMCP } from 'fastmcp';
-import { z } from 'zod';
-import { MasaApiClient } from './apiClients/masaApiClient.js';
+import { TwitterAnalysisTools, TwitterTools, WebTools } from './tools/index.js';
 import { Logger } from './utils/logger.js';
 
 // Load environment variables from .env file
@@ -49,138 +48,18 @@ process.on('uncaughtException', error => {
   }
 });
 
-server.addTool({
-  name: 'start_live_twitter_search',
-  description: 'Initiates a new search on twitter for tweets matching a certain query.',
-  parameters: z.object({
-    query: z.string().describe('The search query'),
-    maxResults: z.number().describe('Maximum number of results to return'),
-  }),
-  execute: async args => {
-    try {
-      const client = new MasaApiClient();
-      const result = await client.startLiveTwitterSearch(args.query, args.maxResults);
-      return JSON.stringify(result);
-    } catch (error) {
-      logger.error('[start_live_twitter_search][ERR]', error);
-      throw error;
-    }
-  },
-});
+// Add Twitter tools
+server.addTool(TwitterTools.start_live_twitter_search);
+server.addTool(TwitterTools.get_live_twitter_search_status);
+server.addTool(TwitterTools.get_live_twitter_search_results);
+server.addTool(TwitterTools.search_with_similarity);
 
-server.addTool({
-  name: 'get_live_twitter_search_status',
-  description: 'Retrieves the current status of a live Twitter search job.',
-  parameters: z.object({
-    jobId: z.string().describe('The ID of the search job'),
-  }),
-  execute: async args => {
-    try {
-      const client = new MasaApiClient();
-      const result = await client.getLiveTwitterSearchStatus(args.jobId);
-      return JSON.stringify(result);
-    } catch (error) {
-      logger.error('[get_live_twitter_search_status][ERR]', error);
-      throw error;
-    }
-  },
-});
+// Add Twitter analysis tools
+server.addTool(TwitterAnalysisTools.extract_search_terms);
+server.addTool(TwitterAnalysisTools.analyze_data);
 
-server.addTool({
-  name: 'scrape_website',
-  description: 'Retrieve the contents from a web URL and parse them into the specified format.',
-  parameters: z.object({
-    url: z.string().describe('The url to scrape'),
-    format: z.enum(['html', 'markdown', 'text']).describe('The format to parse the content into'),
-  }),
-  execute: async args => {
-    try {
-      const client = new MasaApiClient();
-      const result = await client.scrapeWebsite(args.url, {
-        format: 'html',
-      });
-      return JSON.stringify(result);
-    } catch (error) {
-      logger.error('[scrape_website][ERR]', error);
-      throw error;
-    }
-  },
-});
-
-server.addTool({
-  name: 'get_live_twitter_search_results',
-  description: 'Retrieves the results of a live Twitter search job.',
-  parameters: z.object({
-    jobId: z.string().describe('The ID of the search job'),
-  }),
-  execute: async args => {
-    try {
-      const client = new MasaApiClient();
-      const result = await client.getLiveTwitterSearchResults(args.jobId);
-      return JSON.stringify(result);
-    } catch (error) {
-      logger.error('[get_live_twitter_search_results][ERR]', error);
-      throw error;
-    }
-  },
-});
-
-server.addTool({
-  name: 'extract_search_terms',
-  description: 'Extracts optimized search terms from user input using AI.',
-  parameters: z.object({
-    userInput: z.string().describe('The user input to extract search terms from'),
-  }),
-  execute: async args => {
-    try {
-      const client = new MasaApiClient();
-      const result = await client.extractSearchTerms(args.userInput);
-      return JSON.stringify(result);
-    } catch (error) {
-      logger.error('[extract_search_terms][ERR]', error);
-      throw error;
-    }
-  },
-});
-
-server.addTool({
-  name: 'analyze_data',
-  description: 'Analyzes tweet data using AI based on a prompt.',
-  parameters: z.object({
-    tweets: z.array(z.string()).describe('The tweets to analyze (array of strings)'),
-    prompt: z.string().describe('The analysis prompt'),
-  }),
-  execute: async args => {
-    try {
-      const client = new MasaApiClient();
-      const result = await client.analyzeData(args.tweets, args.prompt);
-      return JSON.stringify(result);
-    } catch (error) {
-      logger.error('[analyze_data][ERR]', error);
-      throw error;
-    }
-  },
-});
-
-server.addTool({
-  name: 'search_with_similarity',
-  description: 'Searches Twitter content with similarity matching against keywords.',
-  parameters: z.object({
-    query: z.string().describe('The search query'),
-    keywords: z.array(z.string()).describe('Keywords to match against'),
-    maxResults: z.number().describe('Maximum number of results to return'),
-  }),
-  execute: async args => {
-    try {
-      const client = new MasaApiClient();
-      const result = await client.searchWithSimilarity(args.query, args.keywords, args.maxResults);
-      return JSON.stringify(result);
-    } catch (error) {
-      logger.error('[search_with_similarity][ERR]', error);
-      throw error;
-    }
-  },
-});
+// Add Web tools
+server.addTool(WebTools.scrape_website);
 
 // Start the server
 server

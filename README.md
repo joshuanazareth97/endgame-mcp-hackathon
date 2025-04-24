@@ -1,73 +1,14 @@
-# MCP (Model Context Protocol) Challenge - Masa Subnet 42
+# Masa MCP Server
 
 ## Overview
 
-Build an innovative Model Context Protocol (MCP) implementation for Masa's Subnet 42. Think of MCP as a USB-C port for AI applications - it standardizes how AI models connect to and utilize different data sources and contextual information.
+The Masa Model Context Protocol (MCP) server provides real-time data access for AI models through a standardized interface. This implementation serves as a bridge between AI applications and Masa's data ecosystem, focusing on three key domains:
 
-## Prize Pool: $5,000 USDC
-- 🥇 1st place: $2,500
-- 🥈 2nd place: $1,250
-- 🥉 3rd place: $750
-- 4th place: $300
-- 5th place: $200
+- **Twitter data**: Live search, status monitoring, and trend analysis
+- **Web content**: Website scraping and search term optimization
+- **Data analytics**: AI-powered analysis of collected data
 
-## Challenge Requirements
-
-### Technical Implementation (40%)
-- Design and implement a Model Context Protocol
-- Create interfaces for data source integration
-- Develop context management systems
-- Bonus: Integration with Bittensor ecosystem
-
-### Innovation (25%)
-- Novel approaches to context handling
-- Creative data integration methods
-- Unique applications of contextual awareness
-
-### Performance (20%)
-- Efficient resource utilization
-- Low latency responses
-- Scalable architecture
-
-### Documentation (15%)
-- Clear implementation guide
-- Protocol specification
-- Integration examples
-
-## Repository Structure
-```
-.
-├── src/                  # Implementation
-│   ├── apiClients/       # API clients for external services
-│   ├── config/           # Configuration management
-│   ├── resources/        # Static resources
-│   ├── services/         # Service layer
-│   │   ├── implementations/ # Service implementations
-│   │   └── interfaces/      # Service interfaces
-│   ├── tools/            # MCP tools organized by domain
-│   └── utils/            # Utility modules (logging, caching)
-├── docs/                 # Documentation
-│   ├── IMPLEMENTATION.md # Implementation details
-│   └── SPECIFICATION.md  # MCP specification
-├── tests/                # Test suite
-└── README.md
-```
-
-## Architecture
-
-This MCP implementation follows a service-oriented architecture:
-
-1. **Service Layer**: Core business logic is organized into domain-specific services (Twitter, Web, Analytics)
-2. **API Clients**: Handles external API communication with standardized interfaces
-3. **Tools Layer**: Defines MCP tools that leverage services for functionality
-4. **Utilities**: Provides logging, caching, and configuration management
-
-## Submission Process
-
-1. Fork this repository
-2. Build your MCP implementation
-3. Document your approach
-4. Submit via pull request
+The server is designed for easy integration with Claude Desktop, VS Code Copilot, Cursor, and other AI assistants via the Model Context Protocol.
 
 ## What is MCP?
 
@@ -85,22 +26,97 @@ Masa Subnet 42 is a decentralized data layer for AI agents and applications, fea
 - Enterprise time series capabilities
 - Vector store functionality
 
-## Evaluation Criteria
+## Key Features
 
-Submissions will be judged on:
-- Protocol design elegance
-- Implementation quality
-- Performance metrics
-- Documentation clarity
-- Integration ease
+- **Real-time Twitter analysis**: Search Twitter for trends, track conversations, and analyze sentiment in real-time
+- **Web scraping and content extraction**: Fetch and process web content from any URL
+- **Optimized search term generation**: Automatically extract optimal search terms from user queries
+- **Modular tool architecture**: Domain-specific tools organized by functionality
+- **Efficient caching with LRU and TTL**: Improved performance with intelligent response caching
+- **Comprehensive logging**: Structured JSON logging with configurable log levels
+- **Docker-ready deployment**: Simple containerized setup for any environment
 
-## Getting Started
+## Available Tools
 
-1. Clone this repository
-2. Review the challenge requirements
-3. Design your solution
-4. Implement and test
-5. Submit your work
+### Twitter Tools
+
+- `start_live_twitter_search`: Begin a new Twitter search with customizable parameters
+- `get_live_twitter_search_status`: Check the status of an ongoing Twitter search
+- `get_live_twitter_search_results`: Retrieve results from a completed search
+- `search_tweets_with_similarity`: Find tweets with similarity matching against keywords
+
+### Web Tools
+
+- `scrape_website`: Extract content from any web page with configurable options
+- `extract_search_terms`: Generate optimized search terms from natural language input
+
+### Analytics Tools
+
+- `analyze_data`: Process datasets with AI-powered analysis using custom prompts
+
+## Quick Start
+
+```bash
+# Build the Docker image
+docker build -t masa-mcp-server:latest .
+
+# Run the server with your API key
+docker run --rm -i \
+  -e MASA_API_KEY=<your API key> \
+  -e MASA_API_URL=https://data.dev.masalabs.ai \
+  masa-mcp-server:latest
+```
+
+## Integration
+
+The server integrates with various AI development environments:
+
+### Claude Desktop
+
+Add to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "masa-realtime-data": {
+      "command": "docker",
+      "args": [
+        "run", "--rm", "-i",
+        "-e", "MASA_API_KEY=<your API key>",
+        "-e", "MASA_API_URL=https://data.dev.masalabs.ai",
+        "masa-mcp-server:latest"
+      ]
+    }
+  }
+}
+```
+
+### VS Code / Cursor / Windsurf
+
+Add to `.vscode/mcp.json` or `.cursor/mcp.json`:
+
+```json
+{
+  "servers": {
+    "masa-realtime-data": {
+      "command": "docker",
+      "args": [
+        "run", "--rm", "-i",
+        "-e", "MASA_API_KEY=<your API key>",
+        "-e", "MASA_API_URL=https://data.dev.masalabs.ai",
+        "masa-mcp-server:latest"
+      ]
+    }
+  }
+}
+```
+
+## Development
+
+1. Install Node.js 22
+2. Run `yarn install`
+3. Build with `yarn build` or `yarn build:watch`
+4. Test with `yarn test` or `yarn test:watch`
 
 ## License
 

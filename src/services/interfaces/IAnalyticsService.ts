@@ -1,5 +1,5 @@
-import { IBaseService } from './IBaseService';
-import { DataAnalysisResult } from '../../apiClients/IMasaApiClient';
+import { IBaseService } from './IBaseService.js';
+import { DataAnalysisResult } from '../../apiClients/IMasaApiClient.js';
 
 /**
  * Service interface for analytics and data processing operations

@@ -1,7 +1,13 @@
-import { BaseService } from './BaseService';
-import { ITwitterService } from '../interfaces/ITwitterService';
-import { IMasaApiClient, LiveTwitterSearchJob, LiveTwitterSearchJobStatus, LiveTwitterSearchResultsPage, SimilaritySearchResult } from '../../apiClients/IMasaApiClient';
-import { CacheManager } from '../../utils/cacheManager';
+import { BaseService } from './BaseService.js';
+import { ITwitterService } from '../interfaces/ITwitterService.js';
+import {
+  IMasaApiClient,
+  LiveTwitterSearchJob,
+  LiveTwitterSearchJobStatus,
+  LiveTwitterSearchResultsPage,
+  SimilaritySearchResult,
+} from '../../apiClients/IMasaApiClient.js';
+import { CacheManager } from '../../utils/cacheManager.js';
 
 /**
  * Implementation of the Twitter service
@@ -23,7 +29,10 @@ export class TwitterService extends BaseService implements ITwitterService {
    * @returns Promise resolving to the search job details
    */
   public async searchTweets(query: string, maxResults: number): Promise<LiveTwitterSearchJob> {
-    this.logWithContext('info', `Starting Twitter search for query: "${query}" with maxResults: ${maxResults}`);
+    this.logWithContext(
+      'info',
+      `Starting Twitter search for query: "${query}" with maxResults: ${maxResults}`
+    );
     return this.apiClient.startLiveTwitterSearch(query, maxResults);
   }
 
@@ -55,11 +64,14 @@ export class TwitterService extends BaseService implements ITwitterService {
    * @returns Promise resolving to the similarity search results
    */
   public async searchWithSimilarity(
-    query: string, 
-    keywords: string[], 
+    query: string,
+    keywords: string[],
     maxResults: number
   ): Promise<SimilaritySearchResult> {
-    this.logWithContext('info', `Starting similarity search with query: "${query}" and ${keywords.length} keywords`);
+    this.logWithContext(
+      'info',
+      `Starting similarity search with query: "${query}" and ${keywords.length} keywords`
+    );
     return this.apiClient.searchWithSimilarity(query, keywords, maxResults);
   }
 }

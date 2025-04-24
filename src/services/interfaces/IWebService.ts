@@ -1,9 +1,9 @@
-import { IBaseService } from './IBaseService';
+import { IBaseService } from './IBaseService.js';
 import {
   WebScrapeOptions,
   WebScrapeResult,
-  SearchTermExtractionResult
-} from '../../apiClients/IMasaApiClient';
+  SearchTermExtractionResult,
+} from '../../apiClients/IMasaApiClient.js';
 
 /**
  * Service interface for web-related operations
@@ -16,7 +16,7 @@ export interface IWebService extends IBaseService {
    * @returns Promise resolving to the scraped content
    */
   scrapeWebsite(url: string, options?: WebScrapeOptions): Promise<WebScrapeResult>;
-  
+
   /**
    * Extracts optimized search terms from user input using AI
    * @param userInput The user input to extract search terms from

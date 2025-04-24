@@ -1,10 +1,10 @@
-import { IBaseService } from './IBaseService';
+import { IBaseService } from './IBaseService.js';
 import {
   LiveTwitterSearchJob,
   LiveTwitterSearchJobStatus,
   LiveTwitterSearchResultsPage,
-  SimilaritySearchResult
-} from '../../apiClients/IMasaApiClient';
+  SimilaritySearchResult,
+} from '../../apiClients/IMasaApiClient.js';
 
 /**
  * Service interface for Twitter-related operations
@@ -39,5 +39,9 @@ export interface ITwitterService extends IBaseService {
    * @param maxResults Maximum number of results to return
    * @returns Promise resolving to the similarity search results
    */
-  searchWithSimilarity(query: string, keywords: string[], maxResults: number): Promise<SimilaritySearchResult>;
+  searchWithSimilarity(
+    query: string,
+    keywords: string[],
+    maxResults: number
+  ): Promise<SimilaritySearchResult>;
 }

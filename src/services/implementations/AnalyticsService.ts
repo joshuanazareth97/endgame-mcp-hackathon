@@ -1,7 +1,7 @@
-import { BaseService } from './BaseService';
-import { IAnalyticsService } from '../interfaces/IAnalyticsService';
-import { IMasaApiClient, DataAnalysisResult } from '../../apiClients/IMasaApiClient';
-import { CacheManager } from '../../utils/cacheManager';
+import { BaseService } from './BaseService.js';
+import { IAnalyticsService } from '../interfaces/IAnalyticsService.js';
+import { IMasaApiClient, DataAnalysisResult } from '../../apiClients/IMasaApiClient.js';
+import { CacheManager } from '../../utils/cacheManager.js';
 
 /**
  * Implementation of the Analytics service
@@ -23,7 +23,10 @@ export class AnalyticsService extends BaseService implements IAnalyticsService {
    * @returns Promise resolving to the analysis result
    */
   public async analyzeData(data: string[], prompt: string): Promise<DataAnalysisResult> {
-    this.logWithContext('info', `Analyzing ${data.length} data items with prompt: "${prompt.substring(0, 50)}${prompt.length > 50 ? '...' : ''}"`);
+    this.logWithContext(
+      'info',
+      `Analyzing ${data.length} data items with prompt: "${prompt.substring(0, 50)}${prompt.length > 50 ? '...' : ''}"`
+    );
     return this.apiClient.analyzeData(data, prompt);
   }
 }

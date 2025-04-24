@@ -1,9 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ServiceFactory } from '../src/services/ServiceFactory';
-import { ITwitterService } from '../src/services/interfaces/ITwitterService';
-import { IWebService } from '../src/services/interfaces/IWebService';
-import { IAnalyticsService } from '../src/services/interfaces/IAnalyticsService';
-import { IMasaApiClient } from '../src/apiClients/IMasaApiClient';
+import { ServiceFactory } from '../src/services/ServiceFactory.js';
+import { IMasaApiClient } from '../src/apiClients/IMasaApiClient.js';
 
 // Create a mock API client
 const mockApiClient: IMasaApiClient = {

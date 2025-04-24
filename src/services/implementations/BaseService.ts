@@ -1,5 +1,5 @@
-import { IBaseService } from '../interfaces/IBaseService';
-import { Logger } from '../../utils/logger';
+import { IBaseService } from '../interfaces/IBaseService.js';
+import { Logger } from '../../utils/logger.js';
 
 /**
  * Base service implementation that provides common functionality
@@ -23,7 +23,11 @@ export abstract class BaseService implements IBaseService {
   /**
    * Logs a message with the service name prefix
    */
-  protected logWithContext(level: 'debug' | 'info' | 'warn' | 'error', message: string, ...args: any[]): void {
+  protected logWithContext(
+    level: 'debug' | 'info' | 'warn' | 'error',
+    message: string,
+    ...args: unknown[]
+  ): void {
     const contextMessage = `[${this.serviceName}] ${message}`;
     switch (level) {
       case 'debug':

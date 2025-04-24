@@ -1,13 +1,13 @@
-import { IServiceFactory } from './interfaces/IServiceFactory';
-import { ITwitterService } from './interfaces/ITwitterService';
-import { IWebService } from './interfaces/IWebService';
-import { IAnalyticsService } from './interfaces/IAnalyticsService';
-import { TwitterService } from './implementations/TwitterService';
-import { WebService } from './implementations/WebService';
-import { AnalyticsService } from './implementations/AnalyticsService';
-import { IMasaApiClient } from '../apiClients/IMasaApiClient';
-import { MasaApiClient } from '../apiClients/masaApiClient';
-import { Logger } from '../utils/logger';
+import { IServiceFactory } from './interfaces/IServiceFactory.js';
+import { ITwitterService } from './interfaces/ITwitterService.js';
+import { IWebService } from './interfaces/IWebService.js';
+import { IAnalyticsService } from './interfaces/IAnalyticsService.js';
+import { TwitterService } from './implementations/TwitterService.js';
+import { WebService } from './implementations/WebService.js';
+import { AnalyticsService } from './implementations/AnalyticsService.js';
+import { IMasaApiClient } from '../apiClients/IMasaApiClient.js';
+import { MasaApiClient } from '../apiClients/masaApiClient.js';
+import { Logger } from '../utils/logger.js';
 
 /**
  * Factory for creating and managing service instances
@@ -16,11 +16,11 @@ import { Logger } from '../utils/logger';
 export class ServiceFactory implements IServiceFactory {
   private static instance: ServiceFactory;
   private readonly logger = Logger.getInstance();
-  
+
   private twitterService: ITwitterService | null = null;
   private webService: IWebService | null = null;
   private analyticsService: IAnalyticsService | null = null;
-  
+
   private apiClient: IMasaApiClient;
 
   /**
@@ -51,7 +51,7 @@ export class ServiceFactory implements IServiceFactory {
     }
     return this.twitterService;
   }
-  
+
   /**
    * Gets or creates a Web service instance
    */
@@ -62,7 +62,7 @@ export class ServiceFactory implements IServiceFactory {
     }
     return this.webService;
   }
-  
+
   /**
    * Gets or creates an Analytics service instance
    */
@@ -73,14 +73,14 @@ export class ServiceFactory implements IServiceFactory {
     }
     return this.analyticsService;
   }
-  
+
   /**
    * Gets the API client instance (for internal use)
    */
   public getApiClient(): IMasaApiClient {
     return this.apiClient;
   }
-  
+
   /**
    * Sets a custom API client (for testing)
    */

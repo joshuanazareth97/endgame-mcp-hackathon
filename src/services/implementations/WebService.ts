@@ -1,7 +1,12 @@
-import { BaseService } from './BaseService';
-import { IWebService } from '../interfaces/IWebService';
-import { IMasaApiClient, WebScrapeOptions, WebScrapeResult, SearchTermExtractionResult } from '../../apiClients/IMasaApiClient';
-import { CacheManager } from '../../utils/cacheManager';
+import { BaseService } from './BaseService.js';
+import { IWebService } from '../interfaces/IWebService.js';
+import {
+  IMasaApiClient,
+  WebScrapeOptions,
+  WebScrapeResult,
+  SearchTermExtractionResult,
+} from '../../apiClients/IMasaApiClient.js';
+import { CacheManager } from '../../utils/cacheManager.js';
 
 /**
  * Implementation of the Web service
@@ -27,7 +32,7 @@ export class WebService extends BaseService implements IWebService {
     this.logWithContext('info', `Scraping website: ${url} with format: ${format}`);
     return this.apiClient.scrapeWebsite(url, options);
   }
-  
+
   /**
    * Extracts optimized search terms from user input using AI
    * @param userInput The user input to extract search terms from

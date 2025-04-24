@@ -1,15 +1,15 @@
 // Service interfaces
-export * from './interfaces/IBaseService';
-export * from './interfaces/ITwitterService';
-export * from './interfaces/IWebService';
-export * from './interfaces/IAnalyticsService';
-export * from './interfaces/IServiceFactory';
+export * from './interfaces/IBaseService.js';
+export * from './interfaces/ITwitterService.js';
+export * from './interfaces/IWebService.js';
+export * from './interfaces/IAnalyticsService.js';
+export * from './interfaces/IServiceFactory.js';
 
 // Service implementations
-export * from './implementations/BaseService';
-export * from './implementations/TwitterService';
-export * from './implementations/WebService';
-export * from './implementations/AnalyticsService';
+export * from './implementations/BaseService.js';
+export * from './implementations/TwitterService.js';
+export * from './implementations/WebService.js';
+export * from './implementations/AnalyticsService.js';
 
 // Factory
-export * from './ServiceFactory';
+export * from './ServiceFactory.js';

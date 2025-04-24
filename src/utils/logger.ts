@@ -21,58 +21,125 @@ export class Logger {
   }
 
   /**
-   * Checks if debug mode is enabled via environment variable
-   * @returns boolean True if DEBUG=true, false otherwise
+   * Maps string log levels to numeric priorities
    */
-  private isDebugEnabled(): boolean {
-    return process.env.DEBUG === 'true';
+  private getLogLevel(): number {
+    const level = (process.env.LOG_LEVEL || 'INFO').toUpperCase();
+    const mapping: Record<string, number> = { ERROR: 0, WARN: 1, INFO: 2, DEBUG: 3 };
+    return mapping[level] ?? mapping.INFO;
   }
 
   /**
-   * Logs a message with the current timestamp
-   * @param message The message to log
-   * @param args Additional arguments to log
+   * Determines if a message at the given level should be logged
+   */
+  private shouldLog(level: number): boolean {
+    return this.getLogLevel() >= level;
+  }
+
+  /**
+   * Logs a debug-level message (alias for log)
    */
   public log(message: any, ...args: any[]): void {
     const timestamp = new Date().toISOString();
-    if (this.isDebugEnabled()) {
-      console.log(`[${timestamp}]`, message, ...args);
+    if (this.isDebugEnabled() && this.shouldLog(3)) {
+      if (process.env.LOG_FORMAT === 'json') {
+        const payload = {
+          timestamp,
+          level: 'DEBUG',
+          message,
+          metadata: args.length > 0 ? args[0] : null,
+        };
+        console.log(JSON.stringify(payload));
+      } else {
+        console.log(`[${timestamp}]`, message, ...args);
+      }
     }
   }
 
   /**
-   * Logs an error message with the current timestamp
-   * @param message The error message to log
-   * @param args Additional arguments to log
+   * Debug-level logs
    */
-  public error(message: any, ...args: any[]): void {
+  public debug(message: any, ...args: any[]): void {
     const timestamp = new Date().toISOString();
-    if (this.isDebugEnabled()) {
-      console.error(`[${timestamp}]`, message, ...args);
-    }
-  }
-
-  /**
-   * Logs a warning message with the current timestamp
-   * @param message The warning message to log
-   * @param args Additional arguments to log
-   */
-  public warn(message: any, ...args: any[]): void {
-    const timestamp = new Date().toISOString();
-    if (this.isDebugEnabled()) {
-      console.warn(`[${timestamp}]`, message, ...args);
+    if (this.isDebugEnabled() && this.shouldLog(3)) {
+      if (process.env.LOG_FORMAT === 'json') {
+        const payload = {
+          timestamp,
+          level: 'DEBUG',
+          message,
+          metadata: args.length > 0 ? args[0] : null,
+        };
+        console.log(JSON.stringify(payload));
+      } else {
+        console.debug(`[${timestamp}]`, message, ...args);
+      }
     }
   }
 
   /**
    * Logs an info message with the current timestamp
-   * @param message The info message to log
-   * @param args Additional arguments to log
    */
   public info(message: any, ...args: any[]): void {
     const timestamp = new Date().toISOString();
-    if (this.isDebugEnabled()) {
-      console.info(`[${timestamp}]`, message, ...args);
+    if (this.isDebugEnabled() && this.shouldLog(2)) {
+      if (process.env.LOG_FORMAT === 'json') {
+        const payload = {
+          timestamp,
+          level: 'INFO',
+          message,
+          metadata: args.length > 0 ? args[0] : null,
+        };
+        console.log(JSON.stringify(payload));
+      } else {
+        console.info(`[${timestamp}]`, message, ...args);
+      }
     }
+  }
+
+  /**
+   * Logs a warning message with the current timestamp
+   */
+  public warn(message: any, ...args: any[]): void {
+    const timestamp = new Date().toISOString();
+    if (this.isDebugEnabled() && this.shouldLog(1)) {
+      if (process.env.LOG_FORMAT === 'json') {
+        const payload = {
+          timestamp,
+          level: 'WARN',
+          message,
+          metadata: args.length > 0 ? args[0] : null,
+        };
+        console.log(JSON.stringify(payload));
+      } else {
+        console.warn(`[${timestamp}]`, message, ...args);
+      }
+    }
+  }
+
+  /**
+   * Logs an error message with the current timestamp
+   */
+  public error(message: any, ...args: any[]): void {
+    const timestamp = new Date().toISOString();
+    if (this.isDebugEnabled() && this.shouldLog(0)) {
+      if (process.env.LOG_FORMAT === 'json') {
+        const payload = {
+          timestamp,
+          level: 'ERROR',
+          message,
+          metadata: args.length > 0 ? args[0] : null,
+        };
+        console.log(JSON.stringify(payload));
+      } else {
+        console.error(`[${timestamp}]`, message, ...args);
+      }
+    }
+  }
+
+  /**
+   * Check if debug is enabled
+   */
+  private isDebugEnabled(): boolean {
+    return process.env.DEBUG === 'true';
   }
 }

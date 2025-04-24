@@ -10,6 +10,7 @@ export const envSchema = z.object({
     .url('MASA_API_URL must be a valid URL')
     .default('https://api.masa.xyz/v1'),
   LOG_LEVEL: z.enum(['error', 'warn', 'info', 'debug']).default('info'),
+  LOG_FORMAT: z.enum(['json', 'text']).default('json'),
 });
 
 export type Config = z.infer<typeof envSchema>;

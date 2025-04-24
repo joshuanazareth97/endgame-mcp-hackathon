@@ -8,16 +8,18 @@ describe('Logger', () => {
   const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
   const consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
 
-  // Store the original DEBUG value
+  // Store the original DEBUG and LOG_LEVEL values
   let originalDebug: string | undefined;
+  let originalLogLevel: string | undefined;
 
   // Reset mocks and environment before each test
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2025-04-20T12:00:00Z'));
 
-    // Store original DEBUG value
+    // Store original DEBUG and LOG_LEVEL values
     originalDebug = process.env.DEBUG;
+    originalLogLevel = process.env.LOG_LEVEL;
 
     // Clear console spies
     consoleLogSpy.mockClear();
@@ -36,6 +38,12 @@ describe('Logger', () => {
     } else {
       process.env.DEBUG = originalDebug;
     }
+    // Restore original LOG_LEVEL value
+    if (originalLogLevel === undefined) {
+      delete process.env.LOG_LEVEL;
+    } else {
+      process.env.LOG_LEVEL = originalLogLevel;
+    }
   });
 
   describe('Logger Singleton', () => {
@@ -50,6 +58,7 @@ describe('Logger', () => {
   describe('Logging Methods with DEBUG enabled', () => {
     beforeEach(() => {
       process.env.DEBUG = 'true';
+      process.env.LOG_LEVEL = 'DEBUG';
     });
 
     it('should log messages with timestamp using log method when DEBUG=true', () => {
@@ -112,6 +121,7 @@ describe('Logger', () => {
   describe('Additional Arguments', () => {
     beforeEach(() => {
       process.env.DEBUG = 'true';
+      process.env.LOG_LEVEL = 'DEBUG';
     });
 
     it('should pass additional arguments to console.log', () => {
@@ -130,6 +140,7 @@ describe('Logger', () => {
   describe('Edge Cases', () => {
     beforeEach(() => {
       process.env.DEBUG = 'true';
+      process.env.LOG_LEVEL = 'DEBUG';
     });
 
     it('should handle undefined message', () => {
@@ -151,6 +162,38 @@ describe('Logger', () => {
       logger.warn(123);
 
       expect(consoleWarnSpy).toHaveBeenCalledWith('[2025-04-20T12:00:00.000Z]', 123);
+    });
+  });
+
+  describe('Structured JSON Logging', () => {
+    beforeEach(() => {
+      process.env.DEBUG = 'true';
+      process.env.LOG_LEVEL = 'DEBUG';
+      process.env.LOG_FORMAT = 'json';
+      consoleLogSpy.mockClear();
+    });
+
+    it('should emit valid JSON with correct fields for info()', () => {
+      const logger = Logger.getInstance();
+      logger.info('hello world', { userId: 42 });
+
+      expect(consoleLogSpy).toHaveBeenCalledTimes(1);
+      const output = (consoleLogSpy as any).mock.calls[0][0];
+      const parsed = JSON.parse(output);
+      expect(parsed).toHaveProperty('timestamp');
+      expect(parsed.level).toBe('INFO');
+      expect(parsed.message).toBe('hello world');
+      expect(parsed.metadata).toEqual({ userId: 42 });
+    });
+
+    it('should use null metadata when none provided', () => {
+      const logger = Logger.getInstance();
+      logger.error('oops');
+
+      const parsed = JSON.parse((consoleLogSpy as any).mock.calls[0][0]);
+      expect(parsed.level).toBe('ERROR');
+      expect(parsed.message).toBe('oops');
+      expect(parsed.metadata).toBeNull();
     });
   });
 });

@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { MasaApiClient } from '../apiClients/masaApiClient.js';
 import { Logger } from '../utils/logger.js';
+import { ServiceFactory } from '../services/ServiceFactory.js';
 
 const logger = Logger.getInstance();
 
@@ -14,9 +14,9 @@ export const WebTools = {
     }),
     execute: async (args: { url: string; format: 'html' | 'markdown' | 'text' }) => {
       try {
-        const client = new MasaApiClient();
-        const result = await client.scrapeWebsite(args.url, {
-          format: 'html',
+        const webService = ServiceFactory.getInstance().getWebService();
+        const result = await webService.scrapeWebsite(args.url, {
+          format: args.format,
         });
         return JSON.stringify(result);
       } catch (error) {

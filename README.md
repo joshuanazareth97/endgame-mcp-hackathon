@@ -8,9 +8,7 @@ The Masa Model Context Protocol (MCP) server provides real-time data access for 
 - **Web content**: Website scraping and search term optimization
 - **Data analytics**: AI-powered analysis of collected data
 
-The server is designed for easy integration with Claude, GPT, and other AI assistants via the Model Context Protocol.
-
-For detailed information, see the [Implementation Guide](docs/IMPLEMENTATION.md) and [Protocol Specification](docs/SPECIFICATION.md).
+The server is designed for easy integration with Claude Desktop, VS Code Copilot, Cursor, and other AI assistants via the Model Context Protocol.
 
 ## What is MCP?
 

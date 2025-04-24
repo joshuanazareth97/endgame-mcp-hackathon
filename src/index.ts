@@ -1,10 +1,9 @@
 // Check if it's a connection closed errorr';
+import dotenv from 'dotenv';
 import { FastMCP } from 'fastmcp';
 import { z } from 'zod';
-import dotenv from 'dotenv';
-import { Logger } from './utils/logger.js';
-
 import { MasaApiClient } from './apiClients/masaApiClient.js';
+import { Logger } from './utils/logger.js';
 
 // Load environment variables from .env file
 dotenv.config();

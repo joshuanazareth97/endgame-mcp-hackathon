@@ -70,7 +70,7 @@ For development :
 
 ## Tool Architecture
 
-The MCP tool follow a modular organization pattern:
+The MCP tool follows a modular organization pattern:
 
 1. **Separation by Domain**: Tools are separated into domain-specific modules:
    - `Twitter.ts`: Contains tools for Twitter search and status operations

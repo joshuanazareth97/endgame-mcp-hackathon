@@ -1,44 +1,90 @@
-# My TypeScript Project
+# MCP (Model Context Protocol) Challenge - Masa Subnet 42
 
 ## Overview
-This project is a TypeScript application that utilizes various libraries and tools to provide a robust development experience. It is structured to facilitate easy development, testing, and configuration.
 
-## Table of Contents
-- [Installation](#installation)
-- [Usage](#usage)
-- [Configuration](#configuration)
-- [Testing](#testing)
-- [Logging](#logging)
+Build an innovative Model Context Protocol (MCP) implementation for Masa's Subnet 42. Think of MCP as a USB-C port for AI applications - it standardizes how AI models connect to and utilize different data sources and contextual information.
 
-## Installation
-To get started with this project, clone the repository and install the dependencies using Yarn:
+## Prize Pool: $5,000 USDC
+- 🥇 1st place: $2,500
+- 🥈 2nd place: $1,250
+- 🥉 3rd place: $750
+- 4th place: $300
+- 5th place: $200
 
-```bash
-git clone <repository-url>
-cd my-ts-project
-yarn install
+## Challenge Requirements
+
+### Technical Implementation (40%)
+- Design and implement a Model Context Protocol
+- Create interfaces for data source integration
+- Develop context management systems
+- Bonus: Integration with Bittensor ecosystem
+
+### Innovation (25%)
+- Novel approaches to context handling
+- Creative data integration methods
+- Unique applications of contextual awareness
+
+### Performance (20%)
+- Efficient resource utilization
+- Low latency responses
+- Scalable architecture
+
+### Documentation (15%)
+- Clear implementation guide
+- Protocol specification
+- Integration examples
+
+## Repository Structure
+```
+.
+├── src/                  # Your implementation
+├── docs/                 # Your documentation
+│   ├── IMPLEMENTATION.md
+│   └── SPECIFICATION.md
+├── tests/               # Your tests
+└── README.md
 ```
 
-## Usage
-To run the application, use the following command:
+## Submission Process
 
-```bash
-yarn start
-```
+1. Fork this repository
+2. Build your MCP implementation
+3. Document your approach
+4. Submit via pull request
 
-Make sure to configure your environment variables as needed.
+## What is MCP?
 
-## Configuration
-The project uses a `.env` file for configuration. You can find an example in `config/.env.example`. Copy this file to `.env` and fill in the required values.
+MCP ensures models evolve beyond static training data by:
+- Providing standardized access to contextual data
+- Enabling real-time data integration
+- Supporting dynamic context management
+- Facilitating transparent decision processes
 
-## Testing
-To run the tests, use the following command:
+## What is Subnet 42?
 
-```bash
-yarn test
-```
+Masa Subnet 42 is a decentralized data layer for AI agents and applications, featuring:
+- Real-time data pipelines
+- Decentralized storage solutions
+- Enterprise time series capabilities
+- Vector store functionality
 
-Ensure that you have the necessary testing framework set up in your project.
+## Evaluation Criteria
 
-## Logging
-Logs are stored in the `logs` directory. This directory is tracked by version control to ensure it exists even if empty.
+Submissions will be judged on:
+- Protocol design elegance
+- Implementation quality
+- Performance metrics
+- Documentation clarity
+- Integration ease
+
+## Getting Started
+
+1. Clone this repository
+2. Review the challenge requirements
+3. Design your solution
+4. Implement and test
+5. Submit your work
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

@@ -37,13 +37,30 @@ Build an innovative Model Context Protocol (MCP) implementation for Masa's Subne
 ## Repository Structure
 ```
 .
-├── src/                  # Your implementation
-├── docs/                 # Your documentation
-│   ├── IMPLEMENTATION.md
-│   └── SPECIFICATION.md
-├── tests/               # Your tests
+├── src/                  # Implementation
+│   ├── apiClients/       # API clients for external services
+│   ├── config/           # Configuration management
+│   ├── resources/        # Static resources
+│   ├── services/         # Service layer
+│   │   ├── implementations/ # Service implementations
+│   │   └── interfaces/      # Service interfaces
+│   ├── tools/            # MCP tools organized by domain
+│   └── utils/            # Utility modules (logging, caching)
+├── docs/                 # Documentation
+│   ├── IMPLEMENTATION.md # Implementation details
+│   └── SPECIFICATION.md  # MCP specification
+├── tests/                # Test suite
 └── README.md
 ```
+
+## Architecture
+
+This MCP implementation follows a service-oriented architecture:
+
+1. **Service Layer**: Core business logic is organized into domain-specific services (Twitter, Web, Analytics)
+2. **API Clients**: Handles external API communication with standardized interfaces
+3. **Tools Layer**: Defines MCP tools that leverage services for functionality
+4. **Utilities**: Provides logging, caching, and configuration management
 
 ## Submission Process
 

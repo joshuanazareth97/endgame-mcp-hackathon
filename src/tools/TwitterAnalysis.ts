@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { MasaApiClient } from '../apiClients/masaApiClient.js';
 import { Logger } from '../utils/logger.js';
+import { ServiceFactory } from '../services/ServiceFactory.js';
 
 const logger = Logger.getInstance();
 
@@ -13,8 +13,8 @@ export const TwitterAnalysisTools = {
     }),
     execute: async (args: { userInput: string }) => {
       try {
-        const client = new MasaApiClient();
-        const result = await client.extractSearchTerms(args.userInput);
+        const webService = ServiceFactory.getInstance().getWebService();
+        const result = await webService.extractSearchTerms(args.userInput);
         return JSON.stringify(result);
       } catch (error) {
         logger.error('[extract_search_terms][ERR]', error);
@@ -32,8 +32,8 @@ export const TwitterAnalysisTools = {
     }),
     execute: async (args: { tweets: string[]; prompt: string }) => {
       try {
-        const client = new MasaApiClient();
-        const result = await client.analyzeData(args.tweets, args.prompt);
+        const analyticsService = ServiceFactory.getInstance().getAnalyticsService();
+        const result = await analyticsService.analyzeData(args.tweets, args.prompt);
         return JSON.stringify(result);
       } catch (error) {
         logger.error('[analyze_data][ERR]', error);

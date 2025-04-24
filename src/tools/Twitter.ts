@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { MasaApiClient } from '../apiClients/masaApiClient.js';
 import { Logger } from '../utils/logger.js';
+import { ServiceFactory } from '../services/ServiceFactory.js';
 
 const logger = Logger.getInstance();
 
@@ -14,8 +14,8 @@ export const TwitterTools = {
     }),
     execute: async (args: { query: string; maxResults: number }) => {
       try {
-        const client = new MasaApiClient();
-        const result = await client.startLiveTwitterSearch(args.query, args.maxResults);
+        const twitterService = ServiceFactory.getInstance().getTwitterService();
+        const result = await twitterService.searchTweets(args.query, args.maxResults);
         return JSON.stringify(result);
       } catch (error) {
         logger.error('[start_live_twitter_search][ERR]', error);
@@ -32,8 +32,8 @@ export const TwitterTools = {
     }),
     execute: async (args: { jobId: string }) => {
       try {
-        const client = new MasaApiClient();
-        const result = await client.getLiveTwitterSearchStatus(args.jobId);
+        const twitterService = ServiceFactory.getInstance().getTwitterService();
+        const result = await twitterService.getSearchStatus(args.jobId);
         return JSON.stringify(result);
       } catch (error) {
         logger.error('[get_live_twitter_search_status][ERR]', error);
@@ -50,8 +50,8 @@ export const TwitterTools = {
     }),
     execute: async (args: { jobId: string }) => {
       try {
-        const client = new MasaApiClient();
-        const result = await client.getLiveTwitterSearchResults(args.jobId);
+        const twitterService = ServiceFactory.getInstance().getTwitterService();
+        const result = await twitterService.getSearchResults(args.jobId);
         return JSON.stringify(result);
       } catch (error) {
         logger.error('[get_live_twitter_search_results][ERR]', error);
@@ -70,8 +70,8 @@ export const TwitterTools = {
     }),
     execute: async (args: { query: string; keywords: string[]; maxResults: number }) => {
       try {
-        const client = new MasaApiClient();
-        const result = await client.searchWithSimilarity(args.query, args.keywords, args.maxResults);
+        const twitterService = ServiceFactory.getInstance().getTwitterService();
+        const result = await twitterService.searchWithSimilarity(args.query, args.keywords, args.maxResults);
         return JSON.stringify(result);
       } catch (error) {
         logger.error('[search_with_similarity][ERR]', error);

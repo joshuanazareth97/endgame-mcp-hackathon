@@ -121,4 +121,7 @@ Add to `.vscode/mcp.json` or `.cursor/mcp.json`:
 
 ## License
 
+## Demo Video and Twitter Thread
+https://x.com/_CitizenKhan/status/1914357872504529144
+
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

@@ -13,6 +13,7 @@ import {
   SimilaritySearchResult,
 } from './IMasaApiClient.js';
 import { MASA_API_PATHS } from './masaApiClient.constants.js';
+import { CacheManager } from '../utils/cacheManager.js';
 
 /**
  * Implementation of the Masa API Client
@@ -187,11 +188,21 @@ export class MasaApiClient implements IMasaApiClient {
    * @throws Error if the results request fails
    */
   async getLiveTwitterSearchResults(jobId: string): Promise<LiveTwitterSearchResultsPage> {
-    return this.executeWithRetry(async () => {
+    const cache = CacheManager.getInstance();
+    const cacheKey = `liveTwitterResults-${jobId}`;
+    const cached = cache.get('twitter', cacheKey);
+    if (cached) {
+      this.logger.info(`[Cache Hit] Live Twitter results for ${jobId}`);
+      return cached as LiveTwitterSearchResultsPage;
+    }
+    const result = await this.executeWithRetry(async () => {
       const url = MASA_API_PATHS.SEARCH_LIVE_TWITTER_RESULT.replace('{id}', jobId);
       const response = await this.apiClient.get(url);
       return response.data;
     });
+    cache.set('twitter', cacheKey, result);
+    this.logger.info(`[Cache Set] Live Twitter results for ${jobId}`);
+    return result;
   }
 
   /**
@@ -202,19 +213,28 @@ export class MasaApiClient implements IMasaApiClient {
    * @throws Error if the scraping request fails
    */
   async scrapeWebsite(url: string, options?: WebScrapeOptions): Promise<WebScrapeResult> {
-    return this.executeWithRetry(async () => {
-      // Extract format from options if present, as API expects it as a top-level parameter
+    const cache = CacheManager.getInstance();
+    const format = options?.format || 'html';
+    const cacheKey = `scrape-${format}-${url}`;
+    const cached = cache.get('scrape', cacheKey);
+    if (cached) {
+      this.logger.info(`[Cache Hit] Scrape result for ${url}`);
+      return cached as WebScrapeResult;
+    }
+    const result = await this.executeWithRetry(async () => {
       const requestBody: Record<string, any> = { url };
       if (options?.format) {
         requestBody.format = options.format;
       }
-
       const response = await this.apiClient.post(
         MASA_API_PATHS.SEARCH_LIVE_WEB_SCRAPE,
         requestBody
       );
       return response.data;
     });
+    cache.set('scrape', cacheKey, result);
+    this.logger.info(`[Cache Set] Scrape result for ${url}`);
+    return result;
   }
 
   /**
@@ -224,12 +244,22 @@ export class MasaApiClient implements IMasaApiClient {
    * @throws Error if the extraction request fails
    */
   async extractSearchTerms(userInput: string): Promise<SearchTermExtractionResult> {
-    return this.executeWithRetry(async () => {
+    const cache = CacheManager.getInstance();
+    const cacheKey = `extractSearchTerms-${userInput}`;
+    const cached = cache.get('extract', cacheKey);
+    if (cached) {
+      this.logger.info(`[Cache Hit] Extract search terms for input`);
+      return cached as SearchTermExtractionResult;
+    }
+    const result = await this.executeWithRetry(async () => {
       const response = await this.apiClient.post(MASA_API_PATHS.SEARCH_EXTRACTION, {
         userInput,
       });
       return response.data;
     });
+    cache.set('extract', cacheKey, result);
+    this.logger.info(`[Cache Set] Extract search terms for input`);
+    return result;
   }
 
   /**
@@ -240,13 +270,24 @@ export class MasaApiClient implements IMasaApiClient {
    * @throws Error if the analysis request fails
    */
   async analyzeData(tweets: string[], prompt: string): Promise<DataAnalysisResult> {
-    return this.executeWithRetry(async () => {
+    const cache = CacheManager.getInstance();
+    const keyPayload = JSON.stringify({ tweets, prompt });
+    const cacheKey = `analyzeData-${keyPayload}`;
+    const cached = cache.get('analysis', cacheKey);
+    if (cached) {
+      this.logger.info(`[Cache Hit] Data analysis for prompt`);
+      return cached as DataAnalysisResult;
+    }
+    const result = await this.executeWithRetry(async () => {
       const response = await this.apiClient.post(MASA_API_PATHS.SEARCH_ANALYSIS, {
         tweets,
         prompt,
       });
       return response.data;
     });
+    cache.set('analysis', cacheKey, result);
+    this.logger.info(`[Cache Set] Data analysis for prompt`);
+    return result;
   }
 
   /**
@@ -262,7 +303,15 @@ export class MasaApiClient implements IMasaApiClient {
     keywords: string[],
     maxResults: number
   ): Promise<SimilaritySearchResult> {
-    return this.executeWithRetry(async () => {
+    const cache = CacheManager.getInstance();
+    const keyPayload = JSON.stringify({ query, keywords, maxResults });
+    const cacheKey = `similarity-${keyPayload}`;
+    const cached = cache.get('similarity', cacheKey);
+    if (cached) {
+      this.logger.info(`[Cache Hit] Similarity search for query`);
+      return cached as SimilaritySearchResult;
+    }
+    const result = await this.executeWithRetry(async () => {
       const response = await this.apiClient.post(MASA_API_PATHS.SEARCH_SIMILARITY_TWITTER, {
         query,
         keywords,
@@ -270,5 +319,8 @@ export class MasaApiClient implements IMasaApiClient {
       });
       return response.data;
     });
+    cache.set('similarity', cacheKey, result);
+    this.logger.info(`[Cache Set] Similarity search for query`);
+    return result;
   }
 }
